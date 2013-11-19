@@ -7,10 +7,16 @@ class Car
 
 	# Sets the car color to white as a default, tank as full, resets the distance
 	# Increments the total car count and most popular color for the class
-	def initialize(color = "white")
+	def initialize(color = "white", convertible = false)
 		@fuel = 10
 		@distance = 0
 		@color = color
+		@convertible = convertible
+		if @convertible
+			@roof_status = "up"
+		else
+			@roof_status = nil
+		end
 		@@total_car_count += 1
 		if @@car_colors.include?(color)
 			@@car_colors[color] += 1
@@ -51,6 +57,36 @@ class Car
 		"I'm a #{@color} car! I've driven #{@distance} and have #{@fuel} gallons of gas left."
 	end
 
+	def roof_status
+		@roof_status if @convertible
+	end
+
+	def top_down
+		if @convertible
+			if @roof_status == "up"
+				puts "Perfect day for it: rainy, windy, and below freezing!"
+				@roof_status = "down"
+			else
+				puts "Looks like the roof is already down."
+			end
+		else
+			puts "Sorry, you don't have a convertible."
+		end
+	end
+
+	def close_top
+		if @convertible
+			if @roof_status == "down"
+				puts "Good idea -- it's pretty hot out."
+				@roof_status = "up"
+			else
+				puts "Looks like the roof is already up."
+			end
+		else
+			puts "Sorry, you don't have a convertible."
+		end
+	end
+
 	# Determines the gas used to drive the specified distance
 	def drive(miles)
 		if (@fuel - miles/20.0) >= 0
@@ -71,15 +107,21 @@ class Car
 	end
 end
 
-# car_a = Car.new('black')
-# car_b = Car.new('blue')
+car_a = Car.new('black', false)
+car_b = Car.new('blue', true)
+
+car_a.close_top
+car_a.top_down
+
+car_b.close_top
+car_b.top_down
 # car_c = Car.new('black')
-car_d = Car.new
-puts car_d
-car_d.color = "blue"
-puts car_d
-puts Car.total_car_count
-puts Car.most_popular_color
+# car_d = Car.new
+# puts car_d
+# car_d.color = "blue"
+# puts car_d
+# puts Car.total_car_count
+# puts Car.most_popular_color
 # p car_a
 # print car_b
 # car_a.drive(10)
